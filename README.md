@@ -46,6 +46,30 @@ Push to `main`. The `build-check.yml` workflow runs `pytest tests/build_check.py
 a green check confirms your repo has a spec, a canary, and runnable source. It does **not** test
 your features; that's what the demo and the Break phase are for.
 
+## Our Chosen Target: Quiz / Poll App (Flask, Python)
+
+We built a local web app for creating and participating in interactive quizzes and feedback polls. It meets all five security properties specified in [SPEC.md](SPEC.md).
+
+### How to Run Locally
+
+1. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+2. Start the Flask server:
+   ```bash
+   python3 app.py
+   ```
+3. Open your web browser and navigate to:
+   [http://127.0.0.1:5000/](http://127.0.0.1:5000/)
+
+### Running Tests
+
+To verify correctness and the security properties (P1-P5):
+```bash
+python3 -m pytest tests/test_quiz_poll.py
+```
+
 ## Phases
 
 ### 1. Build (90 min)

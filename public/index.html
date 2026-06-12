@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Quiz & Poll Platform</title>
+    <!-- Google Fonts: Outfit for headers, Inter for body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="dark-theme">
+    <div class="background-glows">
+        <div class="glow-1"></div>
+        <div class="glow-2"></div>
+    </div>
+
+    <header class="app-header">
+        <div class="header-container">
+            <div class="logo">
+                <span class="logo-accent">▲</span> Quiz & Poll
+            </div>
+            <nav class="main-nav">
+                <button id="nav-dashboard-btn" class="nav-btn active" onclick="showView('dashboard')">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+                    Dashboard
+                </button>
+                <button id="nav-create-btn" class="nav-btn" onclick="showView('creator')">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    Create
+                </button>
+            </nav>
+            <div class="theme-switch-container">
+                <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme">
+                    <span class="sun-icon">☀️</span>
+                    <span class="moon-icon">🌙</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <!-- DASHBOARD VIEW -->
+        <section id="view-dashboard" class="app-view active">
+            <div class="view-header">
+                <h1 class="view-title">Active Challenges & Polls</h1>
+                <p class="view-subtitle">Select a quiz or poll below to test your skills or express your opinion.</p>
+            </div>
+            <div id="cards-container" class="cards-grid">
+                <!-- Cards will be dynamically injected here -->
+                <div class="loading-state">Loading activities...</div>
+            </div>
+        </section>
+
+        <!-- CREATOR VIEW -->
+        <section id="view-creator" class="app-view">
+            <div class="view-header">
+                <h1 class="view-title">Design Your Activity</h1>
+                <p class="view-subtitle">Create a quiz with correct answers or a poll to collect opinions.</p>
+            </div>
+            <div class="form-container glass-card">
+                <div class="form-section">
+                    <label for="create-title" class="field-label">Activity Title</label>
+                    <input type="text" id="create-title" class="form-input" placeholder="e.g., General Cybersecurity Quiz" max-length="200" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-section flex-1">
+                        <span class="field-label">Activity Type</span>
+                        <div class="type-selector-group">
+                            <label class="type-radio-label">
+                                <input type="radio" name="create-type" value="quiz" checked onclick="toggleCreatorType('quiz')">
+                                <span class="custom-radio">Quiz (with scores)</span>
+                            </label>
+                            <label class="type-radio-label">
+                                <input type="radio" name="create-type" value="poll" onclick="toggleCreatorType('poll')">
+                                <span class="custom-radio">Poll (no correct answers)</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section flex-1">
+                        <span class="field-label">Access Control</span>
+                        <div class="privacy-control-group">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="create-is-private" onchange="togglePasscodeField()">
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <span class="privacy-status-label">Private (Requires Passcode)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="passcode-container" class="form-section hidden-anim">
+                    <label for="create-passcode" class="field-label">Access Passcode</label>
+                    <input type="password" id="create-passcode" class="form-input" placeholder="Enter custom access code">
+                </div>
+
+                <hr class="form-divider">
+
+                <div class="form-section">
+                    <div class="questions-header">
+                        <h2 class="section-title">Questions</h2>
+                        <button id="add-question-btn" class="btn btn-secondary btn-sm" onclick="addQuestionToCreator()">
+                            + Add Question
+                        </button>
+                    </div>
+                    <div id="creator-questions-list" class="questions-builder-list">
+                        <!-- Questions builder will go here -->
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button id="publish-btn" class="btn btn-primary" onclick="publishActivity()">Publish Activity</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ACTIVITY VIEW (TAKING QUIZ OR VOTING IN POLL) -->
+        <section id="view-activity" class="app-view">
+            <div class="back-bar">
+                <button class="btn-back" onclick="showView('dashboard')">
+                    ← Back to Dashboard
+                </button>
+            </div>
+            
+            <div id="activity-content" class="activity-play-container">
+                <!-- Injected dynamically -->
+            </div>
+        </section>
+
+        <!-- RESULTS VIEW -->
+        <section id="view-results" class="app-view">
+            <div class="back-bar">
+                <button class="btn-back" onclick="showView('dashboard')">
+                    ← Back to Dashboard
+                </button>
+            </div>
+            
+            <div id="results-content" class="results-display-container">
+                <!-- Injected dynamically -->
+            </div>
+        </section>
+    </main>
+
+    <!-- PASSWORD MODAL (FOR PRIVATE ACTIVITIES) -->
+    <div id="password-modal" class="modal-overlay">
+        <div class="modal-card glass-card">
+            <h2 class="modal-title">Authentication Required</h2>
+            <p class="modal-description">This activity is private. Please enter the passcode to access it.</p>
+            <input type="password" id="modal-passcode-input" class="form-input text-center" placeholder="Passcode">
+            <div id="modal-error-msg" class="modal-error"></div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closePasswordModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="submitPasswordModal()">Unlock</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="app-footer">
+        <p>© 2026 Quiz & Poll. Built for Build-it / Break-it / Fix-it Lab. Security features active.</p>
+    </footer>
+</body>
+</html>
